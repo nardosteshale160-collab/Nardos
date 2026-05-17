@@ -1,0 +1,927 @@
+Here is the updated HTML document with enhanced cart functionality that allows easy selecting and adding of products.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Asbeza Bete | Fresh Grocery Delivery – Smart Cart</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fbf7;
+      color: #1e2a1f;
+      line-height: 1.4;
+    }
+
+    :root {
+      --green-primary: #2b6e3c;
+      --green-light: #e9f3e6;
+      --orange-accent: #e67e22;
+      --orange-light: #fdf0e6;
+      --white: #ffffff;
+      --gray-soft: #f5f7f2;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+      --shadow-md: 0 8px 20px rgba(0,0,0,0.08);
+      --border-radius: 24px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* header */
+    .top-bar {
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--green-primary);
+    }
+
+    .logo i {
+      font-size: 2rem;
+      color: var(--orange-accent);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #2d3e2c;
+      transition: 0.2s;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--orange-accent);
+    }
+
+    .lang-cart {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .lang-select {
+      background: var(--green-light);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      color: var(--green-primary);
+    }
+
+    .cart-icon {
+      position: relative;
+      font-size: 1.6rem;
+      color: var(--green-primary);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .cart-icon:hover { transform: scale(1.05); }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -12px;
+      background: var(--orange-accent);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: bold;
+      border-radius: 30px;
+      padding: 2px 7px;
+    }
+
+    /* hero */
+    .hero {
+      background: linear-gradient(135deg, var(--green-light) 0%, #ffffff 100%);
+      padding: 48px 0 40px;
+      border-radius: 0 0 40px 40px;
+      margin-bottom: 24px;
+    }
+
+    .hero-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .hero-text h1 {
+      font-size: 2.4rem;
+      color: var(--green-primary);
+      margin-bottom: 16px;
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      color: #4a5b3e;
+      max-width: 500px;
+      margin-bottom: 24px;
+    }
+
+    .milkrun-badge {
+      background: var(--orange-light);
+      padding: 8px 20px;
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: var(--orange-accent);
+    }
+
+    /* budget planner */
+    .budget-section {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      padding: 28px 24px;
+      margin: 32px 0;
+      box-shadow: var(--shadow-md);
+      border: 1px solid #e2f0da;
+    }
+
+    .budget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .budget-header h2 i {
+      color: var(--orange-accent);
+      margin-right: 8px;
+    }
+
+    .budget-control {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .budget-control input {
+      padding: 12px 16px;
+      border-radius: 60px;
+      border: 1px solid #cfe3c5;
+      font-size: 1rem;
+      width: 200px;
+    }
+
+    .btn-primary {
+      background: var(--green-primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-primary:hover {
+      background: #1f552d;
+      transform: scale(0.98);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--green-primary);
+      color: var(--green-primary);
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .budget-feedback {
+      margin-top: 16px;
+      font-weight: 500;
+      background: var(--green-light);
+      padding: 12px;
+      border-radius: 32px;
+      text-align: center;
+    }
+
+    /* products grid */
+    .section-title {
+      font-size: 1.8rem;
+      margin: 32px 0 20px 0;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 28px;
+      border-bottom: 2px solid #e2eede;
+      padding-bottom: 12px;
+    }
+
+    .cat-btn {
+      background: none;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: inherit;
+      color: #4a6741;
+    }
+
+    .cat-btn.active {
+      background: var(--green-primary);
+      color: white;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #eef3e9;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .product-img {
+      background: #eef3e9;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+      color: var(--green-primary);
+    }
+
+    .product-info {
+      padding: 16px;
+    }
+
+    .product-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-weight: 700;
+      color: var(--orange-accent);
+      font-size: 1.3rem;
+      margin: 8px 0;
+    }
+
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 12px 0;
+      background: var(--green-light);
+      border-radius: 60px;
+      padding: 6px 12px;
+    }
+
+    .qty-btn {
+      background: white;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--green-primary);
+      box-shadow: var(--shadow-sm);
+      transition: 0.1s;
+    }
+    .qty-btn:hover { background: var(--orange-accent); color: white; }
+    .qty-value {
+      font-weight: 700;
+      font-size: 1.1rem;
+      min-width: 40px;
+      text-align: center;
+    }
+    .add-to-cart-btn {
+      background: var(--green-primary);
+      border: none;
+      color: white;
+      width: 100%;
+      padding: 12px;
+      border-radius: 60px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .add-to-cart-btn:hover {
+      background: var(--orange-accent);
+      transform: scale(0.97);
+    }
+    .added-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--orange-accent);
+      color: white;
+      border-radius: 30px;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: 0.2s;
+    }
+    .product-card.added .added-badge {
+      opacity: 1;
+    }
+
+    /* payment section */
+    .payment-section {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 28px 24px;
+      margin: 40px 0;
+      box-shadow: var(--shadow-md);
+      border-top: 5px solid var(--orange-accent);
+    }
+
+    .payment-title {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-form {
+      max-width: 500px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #2d3e2c;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 40px;
+      border: 1px solid #d4e2cc;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .pay-btn {
+      background: var(--orange-accent);
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      margin-top: 10px;
+    }
+
+    .pay-btn:hover {
+      background: #cf711f;
+    }
+
+    .payment-status {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 40px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .package-banner {
+      background: linear-gradient(120deg, #fef7e0, #fff6e9);
+      border-radius: 32px;
+      padding: 24px 28px;
+      margin: 32px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .track-delivery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      margin: 40px 0;
+    }
+
+    .track-card, .delivery-card {
+      flex: 1;
+      background: white;
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #e2eede;
+    }
+
+    .track-input {
+      display: flex;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .track-input input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 60px;
+      border: 1px solid #ccc;
+    }
+
+    /* cart modal */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s;
+    }
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 420px;
+      max-width: 90vw;
+      height: 100%;
+      background: white;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      z-index: 1001;
+      transform: translateX(100%);
+      transition: 0.3s ease;
+    }
+    .cart-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .cart-overlay.active .cart-drawer {
+      transform: translateX(0);
+    }
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 16px;
+    }
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      margin: 20px 0;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .cart-item-details { flex: 2; }
+    .cart-item-actions { display: flex; gap: 8px; align-items: center; }
+    .cart-qty-btn {
+      background: #eee;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .cart-total {
+      font-weight: 800;
+      font-size: 1.3rem;
+      border-top: 2px solid #eee;
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+    .close-cart {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+    footer {
+      background: #1e2a1f;
+      color: #cddfc7;
+      text-align: center;
+      padding: 32px 0;
+      margin-top: 48px;
+      border-radius: 32px 32px 0 0;
+    }
+    .toast-msg {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green-primary);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 500;
+      z-index: 1100;
+      opacity: 0;
+      transition: 0.2s;
+      pointer-events: none;
+    }
+    @media (max-width: 760px) {
+      .navbar { flex-direction: column; align-items: stretch; }
+      .hero-text h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <i class="fas fa-shopping-basket"></i> 
+        <span id="logoText">Asbeza Bete</span>
+        <i class="fas fa-truck" style="font-size: 1.4rem;"></i>
+      </div>
+      <ul class="nav-links">
+        <li><a data-key="navHome" class="active">Home</a></li>
+        <li><a data-key="navAbout">About Us</a></li>
+        <li><a data-key="navCategories">Grocery Categories</a></li>
+        <li><a data-key="navBudget">Budget Planner</a></li>
+        <li><a data-key="navDelivery">Delivery Services</a></li>
+        <li><a data-key="navTracking">Order Tracking</a></li>
+      </ul>
+      <div class="lang-cart">
+        <select class="lang-select" id="languageSelect">
+          <option value="en">🇬🇧 English</option>
+          <option value="am">🇪🇹 አማርኛ</option>
+        </select>
+        <div class="cart-icon" id="cartIcon">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <h1 id="heroTitle">Fresh from farmers & local markets</h1>
+        <p id="heroDesc">Skip the middleman. Smart budget planning, milkrun delivery to reduce transport costs, and scheduled groceries for your household.</p>
+        <div class="milkrun-badge">
+          <i class="fas fa-route"></i> <span id="milkrunText">Milkrun delivery · Save on transport</span>
+        </div>
+      </div>
+      <div><i class="fas fa-leaf" style="font-size: 6rem; color: var(--green-primary); opacity: 0.7;"></i></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="budget-section">
+      <div class="budget-header">
+        <h2><i class="fas fa-calculator"></i> <span id="budgetTitle">Budget Planner</span></h2>
+        <div class="budget-control">
+          <input type="number" id="budgetInput" placeholder="Monthly budget (ETB)" value="3500">
+          <button class="btn-primary" id="setBudgetBtn"><span id="setBudgetText">Set Budget</span></button>
+        </div>
+      </div>
+      <div id="budgetMessage" class="budget-feedback">💡 Set your monthly budget. Add items with quantity selectors!</div>
+    </div>
+
+    <div class="section-title">
+      <i class="fas fa-apple-alt" style="color: var(--orange-accent);"></i> 
+      <span id="productsTitle">Fresh from local markets & farmers</span>
+    </div>
+    <div class="category-tabs" id="categoryTabs">
+      <button class="cat-btn active" data-cat="all">All</button>
+      <button class="cat-btn" data-cat="Vegetables">🥬 Vegetables</button>
+      <button class="cat-btn" data-cat="Fruits">🍎 Fruits</button>
+      <button class="cat-btn" data-cat="Grains">🌾 Grains & Flour</button>
+      <button class="cat-btn" data-cat="Dairy">🥛 Dairy & Eggs</button>
+      <button class="cat-btn" data-cat="Meat">🍗 Meat & Poultry</button>
+      <button class="cat-btn" data-cat="Spices">🌶️ Spices & Herbs</button>
+      <button class="cat-btn" data-cat="Beverages">☕ Beverages</button>
+    </div>
+    <div class="product-grid" id="productContainer"></div>
+
+    <div class="package-banner">
+      <div>
+        <i class="fas fa-calendar-alt" style="font-size: 2rem; color: var(--orange-accent);"></i>
+        <h3 id="packageTitle">📦 Monthly Suggested Grocery Package</h3>
+        <p id="packageDesc">Family combo: Premium grains, fresh meat, dairy, vegetables & fruits — only 2450 ETB</p>
+        <button class="btn-outline" id="addPackageBtn"><span id="packageBtnText">➕ Add Package to Cart</span></button>
+      </div>
+      <i class="fas fa-box-open" style="font-size: 3rem; opacity: 0.5;"></i>
+    </div>
+
+    <div class="payment-section">
+      <div class="payment-title">
+        <i class="fab fa-cc-visa" style="color: #1a1f71;"></i> 
+        <i class="fab fa-cc-mastercard" style="color: #ff5f00;"></i>
+        <i class="fab fa-cc-amex" style="color: #002663;"></i>
+        <span id="paymentHeader">💳 Secure Credit Card Payment</span>
+      </div>
+      <div class="card-form">
+        <div class="form-group">
+          <label id="cardNameLabel">Cardholder Name</label>
+          <input type="text" id="cardName" placeholder="Abebe Belet" value="Abebe Belet" autocomplete="cc-name">
+        </div>
+        <div class="form-group">
+          <label id="cardNumLabel">Card Number</label>
+          <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label id="expiryLabel">Expiry (MM/YY)</label><input type="text" id="expiry" placeholder="MM/YY" maxlength="5"></div>
+          <div class="form-group"><label id="cvvLabel">CVV</label><input type="password" id="cvv" placeholder="123" maxlength="4"></div>
+        </div>
+        <button class="btn-primary pay-btn" id="payNowBtn"><span id="payBtnText">💸 Pay Now (Checkout)</span></button>
+        <div id="paymentStatusMsg" class="payment-status"></div>
+      </div>
+      <p style="font-size: 0.8rem; margin-top: 15px;"><i class="fas fa-lock"></i> <span id="secureNote">Encrypted & secure. Demo mode.</span></p>
+    </div>
+
+    <div class="track-delivery">
+      <div class="track-card">
+        <h3><i class="fas fa-map-marker-alt"></i> <span id="trackTitle">Order Tracking</span></h3>
+        <p id="trackDesc">Enter your order ID to see real-time status (milkrun route).</p>
+        <div class="track-input">
+          <input type="text" id="orderIdInput" placeholder="e.g., ASB-1234">
+          <button class="btn-primary" id="trackOrderBtn"><span id="trackBtnText">Track</span></button>
+        </div>
+        <div id="trackResult" style="margin-top: 12px;">✨ Demo: "ASB-1001" delivered, "ASB-1002" on milkrun.</div>
+      </div>
+      <div class="delivery-card">
+        <h3><i class="fas fa-calendar-check"></i> <span id="scheduleTitle">Schedule Delivery</span></h3>
+        <p id="scheduleDesc">Choose preferred delivery date (milkrun optimization).</p>
+        <input type="date" id="deliveryDate" style="padding: 12px; border-radius: 60px; border: 1px solid #ccc; width: 100%; margin: 12px 0;">
+        <button class="btn-primary" id="scheduleBtn"><span id="scheduleBtnText">Schedule Delivery</span></button>
+        <div id="scheduleMsg" style="margin-top: 12px;"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <p id="footerText">🌿 Asbeza Bete — connecting households with local markets & farmers | Direct from source</p>
+    <p style="margin-top: 12px;"><i class="fas fa-shield-alt"></i> <span id="securityFooter">Secure checkout · Daily backups</span></p>
+  </div>
+</footer>
+
+<div id="cartOverlay" class="cart-overlay">
+  <div class="cart-drawer">
+    <div class="cart-header"><span><i class="fas fa-shopping-basket"></i> <span id="cartHeaderText">My Cart</span></span><button class="close-cart" id="closeCartBtn">&times;</button></div>
+    <div id="cartItemsList" class="cart-items">Your cart is empty</div>
+    <div class="cart-total" id="cartTotalPrice">Total: 0 ETB</div>
+    <button class="btn-primary" id="checkoutBtn" style="margin-top: 20px;"><span id="checkoutText">Proceed to Checkout</span></button>
+  </div>
+</div>
+<div id="toastMsg" class="toast-msg">✨ Added to cart</div>
+
+<script>
+  // PRODUCT DATABASE (full, no coconut/quinoa/sparkling)
+  const productsDB = [
+    { id: 1, name_en: "Fresh Tomato (1kg)", name_am: "ትኩስ ቲማቲም (ኪግ)", price: 85, category: "Vegetables", icon: "🍅" },
+    { id: 2, name_en: "Organic Onion (1kg)", name_am: "ኦርጋኒክ ሽንኩርት (ኪግ)", price: 70, category: "Vegetables", icon: "🧅" },
+    { id: 3, name_en: "Green Kale Bunch", name_am: "ጎመን", price: 45, category: "Vegetables", icon: "🥬" },
+    { id: 4, name_en: "Bell Pepper (250g)", name_am: "በርበሬ (250ግ)", price: 55, category: "Vegetables", icon: "🫑" },
+    { id: 5, name_en: "Fresh Carrot (1kg)", name_am: "ካሮት (ኪግ)", price: 65, category: "Vegetables", icon: "🥕" },
+    { id: 6, name_en: "Potato (1kg)", name_am: "ድንች (ኪግ)", price: 50, category: "Vegetables", icon: "🥔" },
+    { id: 7, name_en: "Ripe Mango (each)", name_am: "ማንጎ", price: 40, category: "Fruits", icon: "🥭" },
+    { id: 8, name_en: "Hass Avocado (each)", name_am: "አቮካዶ", price: 35, category: "Fruits", icon: "🥑" },
+    { id: 9, name_en: "Organic Bananas (bunch)", name_am: "ሙዝ (እስክፍል)", price: 80, category: "Fruits", icon: "🍌" },
+    { id: 10, name_en: "Fresh Papaya (each)", name_am: "ፓፓያ", price: 55, category: "Fruits", icon: "🍈" },
+    { id: 11, name_en: "Sweet Orange (4 pcs)", name_am: "ብርቱካን (4 ቁርጥራጭ)", price: 70, category: "Fruits", icon: "🍊" },
+    { id: 12, name_en: "Crisp Apple (4 pcs)", name_am: "አፕል (4)", price: 120, category: "Fruits", icon: "🍎" },
+    { id: 13, name_en: "Stone-Ground Wheat Flour (2kg)", name_am: "ስንዴ ዱቄት (2ኪግ)", price: 180, category: "Grains", icon: "🌾" },
+    { id: 14, name_en: "Pearl Barley (2kg)", name_am: "ገብስ (2ኪግ)", price: 150, category: "Grains", icon: "🌾" },
+    { id: 15, name_en: "Rolled Oats (1kg)", name_am: "ኦትስ (1ኪግ)", price: 130, category: "Grains", icon: "🌾" },
+    { id: 17, name_en: "Whole Grain Teff Flour (2kg)", name_am: "ጤፍ ዱቄት (2ኪግ)", price: 210, category: "Grains", icon: "🌾" },
+    { id: 18, name_en: "Fresh Whole Milk (1L)", name_am: "ትኩስ ወተት (1ሊ)", price: 95, category: "Dairy", icon: "🥛" },
+    { id: 19, name_en: "Greek Yogurt (500g)", name_am: "እርጎ (500ግ)", price: 70, category: "Dairy", icon: "🥄" },
+    { id: 20, name_en: "Aged White Cheese (300g)", name_am: "አይብ (300ግ)", price: 120, category: "Dairy", icon: "🧀" },
+    { id: 21, name_en: "Free-Range Eggs (6 pcs)", name_am: "እንቁላል (6)", price: 90, category: "Dairy", icon: "🥚" },
+    { id: 22, name_en: "Salted Butter (250g)", name_am: "ቅቤ (250ግ)", price: 160, category: "Dairy", icon: "🧈" },
+    { id: 23, name_en: "Whole Chicken (1.2kg)", name_am: "ዶሮ (1.2ኪግ)", price: 350, category: "Meat", icon: "🍗" },
+    { id: 24, name_en: "Lean Ground Beef (500g)", name_am: "የበሬ ቀቅል (500ግ)", price: 280, category: "Meat", icon: "🥩" },
+    { id: 25, name_en: "Lamb Chops (500g)", name_am: "የበግ ቁርጥራጭ (500ግ)", price: 420, category: "Meat", icon: "🍖" },
+    { id: 26, name_en: "Mixed Spice Blend (200g)", name_am: "ቅመም ድብልቅ (200ግ)", price: 85, category: "Spices", icon: "🌶️" },
+    { id: 27, name_en: "Ground Turmeric (100g)", name_am: "እርድ (100ግ)", price: 45, category: "Spices", icon: "🌿" },
+    { id: 28, name_en: "Cumin Seeds (100g)", name_am: "ከሙን (100ግ)", price: 50, category: "Spices", icon: "🌿" },
+    { id: 29, name_en: "Fresh Rosemary (bunch)", name_am: "ሮዝሜሪ", price: 30, category: "Spices", icon: "🌿" },
+    { id: 30, name_en: "Raw Organic Honey (500g)", name_am: "ማር (500ግ)", price: 320, category: "Spices", icon: "🍯" },
+    { id: 31, name_en: "Fresh Garlic (250g)", name_am: "ነጭ ሽንኩርት (250ግ)", price: 90, category: "Vegetables", icon: "🧄" },
+    { id: 32, name_en: "Fresh Ginger (250g)", name_am: "ዝንጅብል (250ግ)", price: 75, category: "Vegetables", icon: "🫚" },
+    { id: 33, name_en: "Fresh Lemon (4 pcs)", name_am: "ሎሚ (4)", price: 40, category: "Fruits", icon: "🍋" },
+    { id: 34, name_en: "Green Cabbage (whole)", name_am: "ጎመን (ሙሉ)", price: 55, category: "Vegetables", icon: "🥬" },
+    { id: 35, name_en: "Red Beetroot (1kg)", name_am: "ቀይ ድንች (ኪግ)", price: 70, category: "Vegetables", icon: "🍠" },
+    { id: 36, name_en: "Premium Durum Pasta (500g)", name_am: "ፓስታ (500ግ)", price: 75, category: "Grains", icon: "🍝" },
+    { id: 37, name_en: "Ground Coffee - Medium Roast (500g)", name_am: "ቡና (500ግ)", price: 240, category: "Beverages", icon: "☕" },
+    { id: 38, name_en: "Loose Leaf Black Tea (100g)", name_am: "ሻይ (100ግ)", price: 65, category: "Beverages", icon: "🍵" }
+  ];
+
+  const translations = {
+    en: { logoText: "Asbeza Bete", navHome: "Home", navAbout: "About Us", navCategories: "Grocery Categories", navBudget: "Budget Planner", navDelivery: "Delivery Services", navTracking: "Order Tracking", heroTitle: "Fresh from farmers & local markets", heroDesc: "Skip the middleman. Smart budget planning, milkrun delivery to reduce transport costs, and scheduled groceries for your household.", milkrunText: "Milkrun delivery · Save on transport", budgetTitle: "Budget Planner", setBudgetText: "Set Budget", productsTitle: "Fresh from local markets & farmers (38 items)", packageTitle: "📦 Monthly Suggested Grocery Package", packageDesc: "Family combo: Premium grains, fresh meat, dairy, vegetables & fruits — only 2450 ETB", packageBtnText: "➕ Add Package to Cart", paymentHeader: "💳 Secure Credit Card Payment", cardNameLabel: "Cardholder Name", cardNumLabel: "Card Number", expiryLabel: "Expiry (MM/YY)", cvvLabel: "CVV", payBtnText: "💸 Pay Now (Checkout)", secureNote: "Your payment info is encrypted & secure. Demo mode.", trackTitle: "Order Tracking", trackDesc: "Enter your order ID to see real-time status.", trackBtnText: "Track", scheduleTitle: "Schedule Delivery", scheduleDesc: "Choose preferred delivery date (milkrun optimization).", scheduleBtnText: "Schedule Delivery", footerText: "🌿 Asbeza Bete — connecting households with local markets & farmers", securityFooter: "Secure checkout · Daily backups · Customer data protected", cartHeaderText: "My Cart", checkoutText: "Proceed to Checkout" },
+    am: { logoText: "አስበዛ ቤት", navHome: "መነሻ", navAbout: "ስለ እኛ", navCategories: "የምግብ ምድቦች", navBudget: "በጀት አውጪ", navDelivery: "የማድረስ አገልግሎት", navTracking: "ትዕዛዝ መከታተያ", heroTitle: "ከገበሬዎች እና ከአካባቢ ገበያዎች ትኩስ ምግብ", heroDesc: "አማላጅ የለም። ብልህ የበጀት እቅድ፣ ሚልክረን ማድረስ የትራንስፖርት ወጪን ለመቀነስ።", milkrunText: "ሚልክረን ማድረስ · በትራንስፖርት ይቆጥቡ", budgetTitle: "በጀት አውጪ", setBudgetText: "በጀት አስገባ", productsTitle: "ከአካባቢ ገበያ እና ከገበሬዎች ትኩስ ምርት", packageTitle: "📦 ወርሃዊ የተመከረ የምግብ ጥቅል", packageDesc: "የቤተሰብ ጥቅል፡ ከፍተኛ ጥራት ያላቸው እህሎች፣ ትኩስ ሥጋ፣ ወተት፣ አትክልትና ፍራፍሬ — 2450 ብር ብቻ", packageBtnText: "➕ ጥቅሉን ወደ ካርታ ጨምር", paymentHeader: "💳 ደህንነቱ የተጠበቀ የክሬዲት ካርድ ክፍያ", cardNameLabel: "የካርድ ባለቤት ስም", cardNumLabel: "የካርድ ቁጥር", expiryLabel: "የሚያበቃበት ቀን", cvvLabel: "ምስጢራዊ ቁጥር", payBtnText: "💸 አሁን ክፈሉ", secureNote: "የክፍያ መረጃዎ ተመስጥሯል።", trackTitle: "ትዕዛዝ መከታተያ", trackDesc: "ትክክለኛ ሁኔታ ለማየት የትዕዛዝ መለያ ቁጥር ያስገቡ።", trackBtnText: "ፈልግ", scheduleTitle: "ማድረስ ቀጠሮ", scheduleDesc: "የሚፈልጉትን የማድረስ ቀን ይምረጡ", scheduleBtnText: "ማድረስ ቀጠሮ ይያዙ", footerText: "🌿 አስበዛ ቤት — ቤተሰቦችን ከአካባቢ ገበያ እና ገበሬዎች ጋር በማገናኘት", securityFooter: "ደህንነቱ የተጠበቀ ቼክአውት · ዕለታዊ ምትኬ", cartHeaderText: "ጋሪዬ", checkoutText: "ወደ መክፈያ ቀጥል" }
+  };
+  let currentLang = 'en';
+  function updateLanguage(lang) {
+    currentLang = lang;
+    const t = translations[lang];
+    Object.keys(t).forEach(key => { let el = document.getElementById(key); if(el) el.innerText = t[key]; else document.querySelectorAll(`[data-key="${key}"]`).forEach(e=>e.innerText=t[key]); });
+    renderProducts(currentCategory);
+  }
+  document.getElementById('languageSelect').addEventListener('change', e => updateLanguage(e.target.value));
+  updateLanguage('en');
+
+  let cart = []; // { id, name, price, quantity }
+  let userBudget = 3500;
+  let currentCategory = "all";
+  let productQtys = {}; // store selected qty per product id
+
+  function getProductName(p) { return currentLang === 'en' ? p.name_en : p.name_am; }
+  function showToast(msg) { let toast = document.getElementById('toastMsg'); toast.innerText = msg; toast.style.opacity = '1'; setTimeout(() => toast.style.opacity = '0', 1800); }
+
+  function addToCartFromCard(product, quantity) {
+    if(quantity <= 0) return;
+    const existing = cart.find(i => i.id === product.id);
+    if(existing) existing.quantity += quantity;
+    else cart.push({ id: product.id, name: getProductName(product), price: product.price, quantity: quantity });
+    updateCartUI();
+    showToast(`✓ ${quantity} × ${getProductName(product)} added`);
+  }
+
+  function renderProducts(category) {
+    const filtered = category === 'all' ? productsDB : productsDB.filter(p => p.category === category);
+    const container = document.getElementById('productContainer');
+    container.innerHTML = '';
+    filtered.forEach(prod => {
+      const currentQty = productQtys[prod.id] || 1;
+      const card = document.createElement('div'); card.className = 'product-card';
+      card.innerHTML = `
+        <div class="product-img"><i class="fas fa-carrot"></i> ${prod.icon}</div>
+        <div class="product-info">
+          <div class="product-title">${getProductName(prod)}</div>
+          <div class="price">${prod.price} ETB</div>
+          <div class="quantity-selector">
+            <button class="qty-btn" data-id="${prod.id}" data-delta="-1">−</button>
+            <span class="qty-value" id="qty-${prod.id}">${currentQty}</span>
+            <button class="qty-btn" data-id="${prod.id}" data-delta="1">+</button>
+          </div>
+          <button class="add-to-cart-btn" data-id="${prod.id}"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+    // Attach quantity buttons
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.dataset.id);
+        const delta = parseInt(btn.dataset.delta);
+        let newVal = (productQtys[id] || 1) + delta;
+        if(newVal < 1) newVal = 1;
+        productQtys[id] = newVal;
+        const span = document.getElementById(`qty-${id}`);
+        if(span) span.innerText = newVal;
+      });
+    });
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = parseInt(btn.dataset.id);
+        const prod = productsDB.find(p => p.id === id);
+        const qty = productQtys[id] || 1;
+        if(prod) addToCartFromCard(prod, qty);
+      });
+    });
+  }
+
+  function updateCartUI() {
+    let totalItems = 0, totalPrice = 0;
+    const cartDiv = document.getElementById('cartItemsList');
+    if(cart.length === 0) { cartDiv.innerHTML = '<div style="text-align:center;color:gray;">🛒 Your cart is empty</div>'; document.getElementById('cartTotalPrice').innerText = 'Total: 0 ETB'; document.getElementById('cartCount').innerText = '0'; return; }
+    let html = '';
+    cart.forEach((item, idx) => {
+      totalItems += item.quantity;
+      totalPrice += item.price * item.quantity;
+      html += `<div class="cart-item"><div class="cart-item-details"><strong>${item.name}</strong><br>${item.price} ETB x ${item.quantity}</div><div class="cart-item-actions"><button class="cart-qty-btn" onclick="updateCartQuantity(${idx}, -1)">-</button><span style="margin:0 8px; min-width:30px;text-align:center;">${item.quantity}</span><button class="cart-qty-btn" onclick="updateCartQuantity(${idx}, 1)">+</button><button class="cart-qty-btn" style="background:#ffdddd;" onclick="updateCartQuantity(${idx}, -${item.quantity})">🗑️</button></div></div>`;
+    });
+    cartDiv.innerHTML = html;
+    document.getElementById('cartTotalPrice').innerText = `Total: ${totalPrice} ETB`;
+    document.getElementById('cartCount').innerText = totalItems;
+    const msgDiv = document.getElementById('budgetMessage');
+    if(totalPrice > userBudget) msgDiv.innerHTML = `⚠️ Warning: Cart total ${totalPrice} ETB exceeds budget ${userBudget} ETB.`;
+    else msgDiv.innerHTML = `✅ Budget: ${userBudget} ETB | Cart: ${totalPrice} ETB | Within budget.`;
+  }
+  window.updateCartQuantity = function(idx, delta) {
+    let newQ = cart[idx].quantity + delta;
+    if(newQ <= 0) cart.splice(idx,1);
+    else cart[idx].quantity = newQ;
+    updateCartUI();
+  };
+  document.getElementById('setBudgetBtn').onclick = () => { let v = parseInt(document.getElementById('budgetInput').value); if(v>0) userBudget=v; updateCartUI(); };
+  document.getElementById('addPackageBtn').onclick = () => { [17,23,18,1,7,19].forEach(id => { const p = productsDB.find(p=>p.id===id); if(p) addToCartFromCard(p, 1); }); };
+  document.getElementById('payNowBtn').onclick = () => { const name = document.getElementById('cardName').value.trim(), number = document.getElementById('cardNumber').value.replace(/\s/g,''); if(!name||!number||!document.getElementById('expiry').value||!document.getElementById('cvv').value) { document.getElementById('paymentStatusMsg').innerHTML='<span style="color:red;">❌ Fill all card details</span>'; return; } if(number.length<13) { document.getElementById('paymentStatusMsg').innerHTML='<span style="color:red;">❌ Invalid card</span>'; return; } const total = cart.reduce((s,i)=>s+(i.price*i.quantity),0); if(cart.length===0) { document.getElementById('paymentStatusMsg').innerHTML='<span style="color:orange;">⚠️ Cart empty</span>'; return; } document.getElementById('paymentStatusMsg').innerHTML = `<span style="color:green;">✅ Payment of ${total} ETB successful! Thank you, ${name}. Milkrun delivery confirmed.</span>`; cart = []; updateCartUI(); setTimeout(()=>document.getElementById('paymentStatusMsg').innerHTML='',4000); };
+  const cartOverlay = document.getElementById('cartOverlay'), cartIcon = document.getElementById('cartIcon'), closeCart = document.getElementById('closeCartBtn');
+  function showCartModal() { cartOverlay.classList.add('active'); }
+  function hideCartModal() { cartOverlay.classList.remove('active'); }
+  cartIcon.onclick = showCartModal; closeCart.onclick = hideCartModal; cartOverlay.onclick = (e) => { if(e.target === cartOverlay) hideCartModal(); };
+  document.getElementById('checkoutBtn').onclick = () => { if(cart.length===0) alert('Cart empty'); else showCartModal(); };
+  document.getElementById('trackOrderBtn').onclick = () => { let oid = document.getElementById('orderIdInput').value.trim(); const resDiv = document.getElementById('trackResult'); if(!oid) resDiv.innerHTML = '❌ Enter ID'; else if(oid === 'ASB-1001') resDiv.innerHTML = '🚚 Delivered! Milkrun completed.'; else if(oid === 'ASB-1002') resDiv.innerHTML = '🔄 On milkrun route — 3 households.'; else resDiv.innerHTML = `📦 Order ${oid} being prepared.`; };
+  document.getElementById('scheduleBtn').onclick = () => { let date = document.getElementById('deliveryDate').value; if(!date) document.getElementById('scheduleMsg').innerHTML = '⚠️ Select date'; else document.getElementById('scheduleMsg').innerHTML = `✅ Scheduled ${date}. Milkrun active.`; };
+  const catBtns = document.querySelectorAll('.cat-btn');
+  catBtns.forEach(btn => btn.addEventListener('click', () => { catBtns.forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentCategory = btn.dataset.cat; renderProducts(currentCategory); }));
+  renderProducts('all'); updateCartUI();
+</script>
+</body>
+</html>
+```
